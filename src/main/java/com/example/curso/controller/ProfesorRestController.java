@@ -46,6 +46,7 @@ public class ProfesorRestController {
         if(profesorDb != null) {
             profesorDb.setEmail(profesor.getEmail());
             profesorDb.setNombre(profesor.getNombre());
+            profesorDb.setPassword(profesor.getPassword());
             profesorService.updateProfesor(profesorDb); // actualiza la DB con el objeto profesorDb
             return new ResponseEntity<Void>(HttpStatus.CREATED);
         }

@@ -14,6 +14,9 @@ public class CursoServiceImpl implements iCursoService{
     @Autowired
     private iCursoDao cursoDao;
 
+
+
+
     @Override
     @Transactional(readOnly = true)
     public List<Curso> findAll() {
@@ -30,4 +33,27 @@ public class CursoServiceImpl implements iCursoService{
     public List<Curso> getCursosProfesor(Long id) {
         return (List<Curso>) cursoDao.findByProfesorId(id);
     }
+
+    @Override
+    public void deleteCurso(Curso curso) {
+        cursoDao.deleteById(curso.getCurso_id());
+    }
+
+    @Override
+    public void deleteCurso(Long id) {
+        cursoDao.deleteById(id);
+    }
+
+    @Override
+    @Transactional
+    public void deleteAllCurso() {
+        cursoDao.deleteAll();
+    }
+
+    @Override
+    public Curso findByID(Long id) {
+        return cursoDao.findById(id).orElse(null);
+    }
+
+
 }
