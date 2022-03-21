@@ -1,11 +1,11 @@
 package com.example.curso.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.Entity;
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name="profesores")
@@ -36,6 +36,12 @@ public class Profesor implements Serializable {
     @JoinColumn(name = "profesor_id", referencedColumnName ="id")
     private List<Curso> curso= new ArrayList<>();
 
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JsonBackReference
+    @JoinTable(name="profesores_lenguajes",
+            joinColumns = @JoinColumn(name="profesor_id", referencedColumnName="id"),
+            inverseJoinColumns = @JoinColumn(name="lenguaje_id", referencedColumnName="id"))
+    private Set<Lenguaje> lenguajes = new HashSet<Lenguaje>();
 
     @PrePersist
     public void prePersist() {
@@ -49,12 +55,15 @@ public class Profesor implements Serializable {
     public Profesor() {
     }
 
-    public Profesor(String nombre, String email, String password, String foto, Date createAt) {
+    public Profesor(long id, String nombre, String email, String password, String foto, Date createAt, List<Curso> curso, Set<Lenguaje> lenguajes) {
+        this.id = id;
         this.nombre = nombre;
         this.email = email;
         this.password = password;
         this.foto = foto;
         this.createAt = createAt;
+        this.curso = curso;
+        this.lenguajes = lenguajes;
     }
 
     public long getId() {
@@ -111,6 +120,20 @@ public class Profesor implements Serializable {
 
     public void setCurso(List<Curso> curso) {
         this.curso = curso;
+    }
+
+
+    public Set<Lenguaje> getLenguajes() {
+        return lenguajes;
+    }
+
+    public void setLenguajes(Set<Lenguaje> lenguajes) {
+        this.lenguajes = lenguajes;
+    }
+
+
+    public void addLenguaje (Lenguaje lenguaje) {
+        this.lenguajes.add(lenguaje);
     }
 
     private static final long serialVersionUID = 1L;
